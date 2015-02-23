@@ -36,10 +36,11 @@
 #define MAXBUF		1024
 
 int main(int Count, char *Strings[])
-{   int sockfd;
+{   
+    int sockfd;
 	struct sockaddr_in self;
 	char buffer[MAXBUF];
-
+    
 	/*---Create streaming socket---*/
     if ( (sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0 )
 	{
@@ -67,7 +68,10 @@ int main(int Count, char *Strings[])
 		exit(errno);
 	}
 
+    
+
 	/*---Forever... ---*/
+    int i = 0;
 	while (1)
 	{	
         int clientfd;
@@ -79,10 +83,13 @@ int main(int Count, char *Strings[])
 		printf("%s:%d connected\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
 		/*---Echo back anything sent---*/
-		send(clientfd, buffer, recv(clientfd, buffer, MAXBUF, 0), 0);
 
+        sprintf(buffer, "%d", i);
+        printf("%s", buffer);
+		send(clientfd, buffer, sizeof(int), 0);
 		/*---Close data connection---*/
 		close(clientfd);
+        ++i;
 	}
 
 	/*---Clean up (should never get here!)---*/
