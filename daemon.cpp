@@ -97,7 +97,6 @@ int main(int Count, char *Strings[])
     while(1)
     {
         sprintf(buffer, "%d", i);
-        printf("%s", buffer);
         send(clientfd, buffer, sizeof(int), 0);
         /*---Close data connection---*/
         ++i;
