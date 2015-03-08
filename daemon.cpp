@@ -94,16 +94,14 @@ int main(int Count, char *Strings[])
 
     /*---Echo back anything sent---*/
 
-    while(1)
+    while(i < 1000000)
     {
         sprintf(buffer, "%d", i);
         send(clientfd, buffer, sizeof(int), 0);
         /*---Close data connection---*/
         ++i;
-        if (i == 1000) {
-            i = 0;
-        }
     }
+    printf("done sending!");
 
 	/*---Clean up (should never get here!)---*/
 	close(clientfd);

@@ -15,6 +15,15 @@ app = Flask(__name__)
 client_cpp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_cpp.connect(('localhost', 9999))
 
+start = time.time()
+i = 0
+print "starting..."
+while i < 1000:
+    msg = {'value': client_cpp.recv(4)}
+    i+=1
+print "done!"
+print time.time() - start
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -28,6 +37,6 @@ def request():
 
     return jsonify(msg)
 
-if __name__ == '__main__':
-    app.run()
+#if __name__ == '__main__':
+#    app.run()
 
