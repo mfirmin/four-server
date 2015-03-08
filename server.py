@@ -33,5 +33,5 @@ def request():
     return jsonify(msg)
 
 if __name__ == '__main__':
-    app.run(host='192.168.0.16')
+    app.run()
 

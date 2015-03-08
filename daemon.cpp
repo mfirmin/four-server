@@ -26,11 +26,18 @@
 *	a streaming server.
 **************************************************************************/
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <errno.h>
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <resolv.h>
 #include <arpa/inet.h>
 #include <errno.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <streambuf>
+#include <unistd.h>
 
 #define MY_PORT		9999
 #define MAXBUF		1024
@@ -40,6 +47,7 @@ int main(int Count, char *Strings[])
     int sockfd;
 	struct sockaddr_in self;
 	char buffer[MAXBUF];
+
     
 	/*---Create streaming socket---*/
     if ( (sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0 )
@@ -76,10 +84,10 @@ int main(int Count, char *Strings[])
 	{	
         int clientfd;
 		struct sockaddr_in client_addr;
-		int addrlen=sizeof(client_addr);
+		int addrlen=(sizeof(client_addr));
 
 		/*---accept a connection (creating a data pipe)---*/
-		clientfd = accept(sockfd, (struct sockaddr*)&client_addr, &addrlen);
+		clientfd = accept(sockfd, (struct sockaddr*)&client_addr, (socklen_t*)&addrlen);
 		printf("%s:%d connected\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
 		/*---Echo back anything sent---*/
