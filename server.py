@@ -12,6 +12,8 @@ import socket, time
 from flask import Flask, jsonify, render_template, request
 app = Flask(__name__)
 
+client_cpp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_cpp.connect(('localhost', 9999))
 
 @app.route('/')
 def index():
@@ -20,15 +22,9 @@ def index():
 @app.route('/request/', methods=['GET'])
 def request():
 
-    client_cpp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_cpp.connect(('localhost', 9999))
     print 'got a request:'
-    print client_cpp.send('1'), 'bytes sent to cppclient.'
-    time.sleep(0.2)
-    msg = {'value': client_cpp.recv(1024)}
-
-    print msg
-
+    #print client_cpp.send('1'), 'bytes sent to cppclient.'
+    msg = {'value': client_cpp.recv(4)}
 
     return jsonify(msg)
 

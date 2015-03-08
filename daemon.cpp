@@ -80,28 +80,34 @@ int main(int Count, char *Strings[])
 
 	/*---Forever... ---*/
     int i = 0;
-	while (1)
-	{	
-        int clientfd;
-		struct sockaddr_in client_addr;
-		int addrlen=(sizeof(client_addr));
+    int clientfd;
+    struct sockaddr_in client_addr;
+    int addrlen=(sizeof(client_addr));
 
-		/*---accept a connection (creating a data pipe)---*/
-		clientfd = accept(sockfd, (struct sockaddr*)&client_addr, (socklen_t*)&addrlen);
-		printf("%s:%d connected\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+    /*---accept a connection (creating a data pipe)---*/
+    clientfd = accept(sockfd, (struct sockaddr*)&client_addr, (socklen_t*)&addrlen);
+    // just want our client now. only ever listen to one.
+    close(sockfd);
 
-		/*---Echo back anything sent---*/
+    // inet_ntoa obsolete, use inet_ntop!
+    printf("%s:%d connected\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
+    /*---Echo back anything sent---*/
+
+    while(1)
+    {
         sprintf(buffer, "%d", i);
         printf("%s", buffer);
-		send(clientfd, buffer, sizeof(int), 0);
-		/*---Close data connection---*/
-		close(clientfd);
+        send(clientfd, buffer, sizeof(int), 0);
+        /*---Close data connection---*/
         ++i;
-	}
+        if (i == 1000) {
+            i = 0;
+        }
+    }
 
 	/*---Clean up (should never get here!)---*/
-	close(sockfd);
+	close(clientfd);
 	return 0;
 }
 
