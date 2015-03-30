@@ -8,21 +8,12 @@
     :copyright: (c) 2015 by Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
-import socket, time
-from flask import Flask, jsonify, render_template, request
+import socket, time, string
+from flask import Flask, jsonify, render_template, request, json
 app = Flask(__name__)
 
 client_cpp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_cpp.connect(('localhost', 9999))
-
-start = time.time()
-i = 0
-print "starting..."
-while i < 1000:
-    msg = {'value': client_cpp.recv(4)}
-    i+=1
-print "done!"
-print time.time() - start
 
 @app.route('/')
 def index():
@@ -33,10 +24,11 @@ def request():
 
     print 'got a request:'
     #print client_cpp.send('1'), 'bytes sent to cppclient.'
-    msg = {'value': client_cpp.recv(4)}
+    msglen = int(client_cpp.recv(4).strip('\x00'))
+    msg = client_cpp.recv(msglen)
 
-    return jsonify(msg)
+    return jsonify(json.loads(msg))
 
-#if __name__ == '__main__':
-#    app.run()
+if __name__ == '__main__':
+    app.run()
 

@@ -1,17 +1,13 @@
 {% extends "layout.html" %}
 {% block body %}
 <script type="text/javascript">
-    var t = 0; 
-    while ( t < 10000) {
-        $.ajax({
-            type: "GET",
-            url: $SCRIPT_ROOT + "/request/",
-            contentType: "application/json; charset=utf-8",
-            data: { request: t },
-            success: function(data) { $('#echoResult').text(data.value); }
-        });
-        t++;
-    };
+    $.ajax({
+        type: "GET",
+        url: $SCRIPT_ROOT + "/request/",
+        contentType: "application/json; charset=utf-8",
+        data: { request: 'i' },
+        success: function(data) { $('#echoResult').text(data.rArm); }
+    });
 </script>
 <h1>jQuery Example</h1>
 <p>

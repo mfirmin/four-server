@@ -62,6 +62,12 @@ int main(int Count, char *Strings[])
 	self.sin_port = htons(MY_PORT);
 	self.sin_addr.s_addr = INADDR_ANY;
 
+    int yes = 1;
+    if (setsockopt(sockfd,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(int)) == -1) {
+        perror("setsockopt");
+        exit(1);
+    } 
+
 	/*---Assign a port number to the socket---*/
     if ( bind(sockfd, (struct sockaddr*)&self, sizeof(self)) != 0 )
 	{
@@ -92,15 +98,12 @@ int main(int Count, char *Strings[])
     // inet_ntoa obsolete, use inet_ntop!
     printf("%s:%d connected\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
-    /*---Echo back anything sent---*/
 
-    while(i < 1000000)
-    {
-        sprintf(buffer, "%d", i);
-        send(clientfd, buffer, sizeof(int), 0);
+    sprintf(buffer, "%d", 12);
+    send(clientfd, buffer, sizeof(int), 0);
+    sprintf(buffer, "%s", "{\"rArm\": 50}");
+    send(clientfd, buffer, 12*sizeof(char), 0);
         /*---Close data connection---*/
-        ++i;
-    }
     printf("done sending!");
 
 	/*---Clean up (should never get here!)---*/
