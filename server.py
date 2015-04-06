@@ -8,7 +8,7 @@
     :copyright: (c) 2015 by Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
-import socket, time, string
+import socket, time, string, struct
 from flask import Flask, jsonify, render_template, request, json
 app = Flask(__name__)
 
@@ -24,7 +24,11 @@ def request():
 
     print 'got a request:'
     #print client_cpp.send('1'), 'bytes sent to cppclient.'
-    msglen = int(client_cpp.recv(4).strip('\x00'))
+
+    msglenstr = client_cpp.recv(4)
+
+    msglen = struct.unpack("!i", msglenstr)[0]
+    
     msg = client_cpp.recv(msglen)
 
     return jsonify(json.loads(msg))
