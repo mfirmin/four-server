@@ -26,8 +26,9 @@ def request():
     #print client_cpp.send('1'), 'bytes sent to cppclient.'
 
     msglenstr = client_cpp.recv(4)
-
-    msglen = struct.unpack("!i", msglenstr)[0]
+    print msglenstr
+    msglen = struct.unpack("!i", msglenstr)
+    print msglen
     
     msg = client_cpp.recv(msglen)
 
