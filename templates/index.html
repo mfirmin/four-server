@@ -1,13 +1,15 @@
 {% extends "layout.html" %}
 {% block body %}
 <script type="text/javascript">
+    setInterval(function() {
     $.ajax({
         type: "GET",
         url: $SCRIPT_ROOT + "/request/",
         contentType: "application/json; charset=utf-8",
         data: {},
-        success: function(data) { $('#echoResult').text(data.rArm); }
+        success: function(data) { $('#echoResult').text(data.rHand.pos[0]); }
     });
+    }, 1000/30.);
 </script>
 <h1>jQuery Example</h1>
 <p>

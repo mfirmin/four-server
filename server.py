@@ -10,7 +10,11 @@
 """
 import socket, time, string, struct
 from flask import Flask, jsonify, render_template, request, json
+from flask.ext.socketio import SocketIO
+
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'yellow'
+socketio = SocketIO(app)
 
 client_cpp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_cpp.connect(('localhost', 9999))
@@ -26,14 +30,12 @@ def request():
     #print client_cpp.send('1'), 'bytes sent to cppclient.'
 
     msglenstr = client_cpp.recv(4)
-    print msglenstr
     msglen = struct.unpack("!i", msglenstr)
-    print msglen
     
-    msg = client_cpp.recv(msglen)
+    msg = client_cpp.recv(msglen[0])
 
     return jsonify(json.loads(msg))
 
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app)
 
