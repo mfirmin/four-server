@@ -1,16 +1,24 @@
 {% extends "layout.html" %}
 {% block body %}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
 <script type="text/javascript">
-    var t = 0;
-    setInterval(function() { t++;
-        $.ajax({
-            type: "GET",
-            url: $SCRIPT_ROOT + "/request/",
-            contentType: "application/json; charset=utf-8",
-            data: { request: t },
-            success: function(data) { $('#echoResult').text(data.value); }
-        });
-    }, 1000/30);
+
+    console.log('http://' + document.domain + ':' + location.port);
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    socket.on('connect', function() {
+            socket.emit('event_connect', {data: 'I\'m connected'});
+    });
+
+    socket.on('frame', function(msg) {
+            jsonmsg = JSON.parse(msg);
+            $('#echoResult').text(jsonmsg.rHand.pos[1]);
+    });
+
+    setInterval(function() {
+        socket.send('requestframe');
+        socket.emit('requestframe', {'data': 'nothing'});
+    }, 1000./30.);
 </script>
 <h1>jQuery Example</h1>
 <p>

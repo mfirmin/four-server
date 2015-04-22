@@ -8,30 +8,32 @@
     :copyright: (c) 2015 by Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
-import socket, time
-from flask import Flask, jsonify, render_template, request
-app = Flask(__name__)
+import socket, time, string, struct
+from flask import Flask, jsonify, render_template, request, json
+from flask.ext.socketio import SocketIO
 
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'yellow'
+socketio = SocketIO(app)
+
+client_cpp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_cpp.connect(('localhost', 9999))
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/request/', methods=['GET'])
-def request():
+@socketio.on('requestframe')
+def requestframe(message_in):
 
-    client_cpp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_cpp.connect(('localhost', 9999))
-    print 'got a request:'
-    print client_cpp.send('1'), 'bytes sent to cppclient.'
-    time.sleep(0.2)
-    msg = {'value': client_cpp.recv(1024)}
+    msglenstr = client_cpp.recv(4)
+    msglen = struct.unpack("!i", msglenstr)
 
-    print msg
+    msg = client_cpp.recv(msglen[0])
 
+    socketio.emit('frame', msg)
 
-    return jsonify(msg)
 
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app, '127.0.0.1', 4000)
 
