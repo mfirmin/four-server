@@ -23,19 +23,17 @@ client_cpp.connect(('localhost', 9999))
 def index():
     return render_template('index.html')
 
-@app.route('/request/', methods=['GET'])
-def request():
-
-    print 'got a request:'
-    #print client_cpp.send('1'), 'bytes sent to cppclient.'
+@socketio.on('requestframe')
+def requestframe(message_in):
 
     msglenstr = client_cpp.recv(4)
     msglen = struct.unpack("!i", msglenstr)
-    
+
     msg = client_cpp.recv(msglen[0])
 
-    return jsonify(json.loads(msg))
+    socketio.emit('frame', msg)
+
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, '127.0.0.1', 4000)
 
