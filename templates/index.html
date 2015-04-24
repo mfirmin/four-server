@@ -16,10 +16,15 @@
             $('#echoResult').text(jsonmsg.rHand.pos[1]);
     });
 
+    socket.on('test', function(msg) {
+            jsonmsg = JSON.parse(msg);
+            $('#echoResult').text(jsonmsg.hello);
+    });
+            
     setInterval(function() {
-        socket.send('requestframe');
         socket.emit('requestframe', {'data': 'nothing'});
     }, 1000./30.);
+    
 </script>
 <h1>jQuery Example</h1>
 <p>

@@ -27,8 +27,8 @@ def index():
 def requestframe(message_in):
 
     msglenstr = client_cpp.recv(4)
-    msglen = struct.unpack("!i", msglenstr)
 
+    msglen = struct.unpack("!i", msglenstr)
 
     msg = client_cpp.recv(msglen[0])
 
