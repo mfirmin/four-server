@@ -23,12 +23,34 @@ client_cpp.connect(('localhost', 9999))
 def index():
     return render_template('index.html')
 
+@socketio.on('init')
+def requestframe(message_in):
+
+    msglen = struct.pack("!i", 4)
+    bytesSent = client_cpp.send(msglen)
+
+    client_cpp.send('init')
+
+    msglen = struct.pack("!i", len(message_in))
+    print len(message_in) 
+    bytesSent = client_cpp.send(msglen)
+
+    client_cpp.send(message_in)
+
+#    msglenstr = client_cpp.recv(4)
+#
+#    msglen = struct.unpack("!i", msglenstr)
+#
+#    msg = client_cpp.recv(msglen[0])
+#
+#    socketio.emit('frame', msg)
+
 @socketio.on('requestframe')
 def requestframe(message_in):
 
     msglenstr = client_cpp.recv(4)
 
-    msglen = struct.unpack("!i", msglenstr)
+    msglen = struct.unpack("@i", msglenstr)
 
     msg = client_cpp.recv(msglen[0])
 
