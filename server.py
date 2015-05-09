@@ -37,13 +37,13 @@ def requestframe(message_in):
 
     client_cpp.send(message_in)
 
-#    msglenstr = client_cpp.recv(4)
-#
-#    msglen = struct.unpack("!i", msglenstr)
-#
-#    msg = client_cpp.recv(msglen[0])
-#
-#    socketio.emit('frame', msg)
+    msglenstr = client_cpp.recv(4)
+
+    msglen = struct.unpack("!i", msglenstr)
+
+    msg = client_cpp.recv(msglen[0])
+
+    socketio.emit('init', msg)
 
 @socketio.on('requestframe')
 def requestframe(message_in):

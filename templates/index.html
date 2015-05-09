@@ -16,12 +16,12 @@
             $('#echoResult').text(jsonmsg.rHand.pos[1]);
     });
 
-    socket.on('test', function(msg) {
+    socket.on('init', function(msg) {
             jsonmsg = JSON.parse(msg);
-            $('#echoResult').text(jsonmsg.hello);
+            $('#echoResult').text(jsonmsg.entities.rHand.pos[0]);
     });
 
-    socket.emit('init', 'newWorld');
+    socket.emit('init', 'default');
             
 /*
     setInterval(function() {
@@ -30,7 +30,7 @@
     */
     
 </script>
-<h1>jQuery Example</h1>
+<h1>Four</h1>
 <p>
 <strong> <div id='echoResult'></div></strong>
 {% endblock %}
