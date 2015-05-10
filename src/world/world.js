@@ -7,14 +7,17 @@ var Cylinder = require('../entity/cylinder');
 var Sphere   = require('../entity/sphere');
 var Capsule  = require('../entity/capsule');
 
-function World() {
+function World(name) {
 
+    this.name = name;
     this.initializeGL();
     this.initialize();
     this.initializeDiv();
     this.paused = true;
 
     this.entities = {};
+
+    this.renderReady = true;
 }
 
 
