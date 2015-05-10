@@ -22,6 +22,20 @@ Entity.prototype.initialize = function() {
 
 }
 
+Entity.prototype.setPosition = function(xyz) {
+    this.mesh.position.x = xyz[0];
+    this.mesh.position.y = xyz[0];
+    this.mesh.position.z = xyz[0];
+}
+Entity.prototype.setRotation = function(q) {
+    /*
+    this.mesh.position.x = xyz[0];
+    this.mesh.position.y = xyz[0];
+    this.mesh.position.z = xyz[0];
+    this.mesh.position.q = xyz[0];
+    */
+}
+
 Entity.prototype.getPosition = function() {
     return this.position;
 }

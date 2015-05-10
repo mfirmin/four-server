@@ -9,13 +9,15 @@ function Sphere(name, radius, height, opts) {
 
 }
 
+Sphere.prototype = Object.create(Entity.prototype);
 
 Sphere.prototype.constructor = Sphere;
 
 Sphere.prototype.initialize = function() {
 
-    var color = (this.opts.color === undefined) ? [130,130,130] : this.opts.color;
-    var cstring = 'rgb(' + color[0] + ','+ color[1]  + ',' + color[2]  + ')';
+    var c = (this.opts.color === undefined) ? [130,130,130] : this.opts.color;
+    var cstring = 'rgb(' + c[0] + ','+ c[1]  + ',' + c[2]  + ')';
+    var color = new THREE.Color(cstring);
 
     var geo = new THREE.SphereGeometry(this.radius);
 

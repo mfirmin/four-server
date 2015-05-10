@@ -29,15 +29,21 @@ World.prototype.initializeGL = function() {
         }
     }
     this.error = false;
+
+    this.renderer.setClearColor(0xffffff, 1);
 }
 
 World.prototype.initialize = function() {
     this.scene = new THREE.Scene();
-    this.camera = new THREE.OrthographicCamera(-5, 5, 5, -5, 1, 20);
+    this.camera = new THREE.OrthographicCamera(-5, 5, 5, -5, 1, 2000);
     this.scene.add(this.camera);
     this.light = new THREE.PointLight( 0xfffffa, 1, 0 );
-    this.light.position.set( 1, 100, 150 );
+    this.light.position.set( 1, 20, -20 );
     this.scene.add( this.light );
+
+    this.camera.position.z = -100;
+    this.camera.lookAt(new THREE.Vector3(0,0,0));
+
 }
 
 World.prototype.initializeDiv = function() {
@@ -50,6 +56,8 @@ World.prototype.initializeDiv = function() {
             width: 400,
             height: 400,
         });
+
+    this.renderer.setSize(400,400);
 
     this.canvas = $(this.renderer.domElement).width(400).height(400).addClass("threeCanvas");
     $(this.panel).append(this.canvas);
@@ -64,7 +72,7 @@ World.prototype.addEntity = function(e) {
         return -1;
     }
 
-    this.entities[name] = (e);
+    this.entities[name] = e;
 
     this.scene.add(e.mesh);
 }
@@ -78,7 +86,6 @@ World.prototype.go = function() {
     this.paused = false;
 
     var renderLoop = function() {
-        console.log('going');
         this.renderer.render(this.scene, this.camera);
         if (!(this.paused)) { setTimeout(renderLoop, 1000/30); }
     }.bind(this)
