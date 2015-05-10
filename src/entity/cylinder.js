@@ -19,7 +19,7 @@ Cylinder.prototype.initialize = function() {
     var cstring = 'rgb(' + c[0] + ','+ c[1]  + ',' + c[2]  + ')';
     var color = new THREE.Color(cstring);
 
-    var geo = new THREE.CylinderGeometry(this.radius, this.height);
+    var geo = new THREE.CylinderGeometry(this.radius, this.radius, this.height);
 
     var mat = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: cstring, specular: 0x030303, shininess: 10, shading: THREE.SmoothShading} );
     var mesh = new THREE.Mesh( geo , mat );

@@ -24,8 +24,8 @@ Entity.prototype.initialize = function() {
 
 Entity.prototype.setPosition = function(xyz) {
     this.mesh.position.x = xyz[0];
-    this.mesh.position.y = xyz[0];
-    this.mesh.position.z = xyz[0];
+    this.mesh.position.y = xyz[1];
+    this.mesh.position.z = xyz[2];
 }
 Entity.prototype.setRotation = function(q) {
     /*

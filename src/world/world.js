@@ -2,6 +2,11 @@
 
 var THREE = require('../lib/three.min.js');
 
+var Box      = require('../entity/box');
+var Cylinder = require('../entity/cylinder');
+var Sphere   = require('../entity/sphere');
+var Capsule  = require('../entity/capsule');
+
 function World() {
 
     this.initializeGL();
@@ -35,7 +40,7 @@ World.prototype.initializeGL = function() {
 
 World.prototype.initialize = function() {
     this.scene = new THREE.Scene();
-    this.camera = new THREE.OrthographicCamera(-5, 5, 5, -5, 1, 2000);
+    this.camera = new THREE.OrthographicCamera(-1.25, 1.25, 2.5, 0, 1, 2000);
     this.scene.add(this.camera);
     this.light = new THREE.PointLight( 0xfffffa, 1, 0 );
     this.light.position.set( 1, 20, -20 );
@@ -78,6 +83,40 @@ World.prototype.addEntity = function(e) {
 }
 
 World.prototype.populateFromJSON = function(data) {
+
+    var entities = data.entities;
+    for (var e in entities) {
+
+        var name = e;
+        var type = entities[e].type;
+        var toAdd;
+        switch (type) {
+            case 'box':
+                toAdd = new Box(name, entities[e].sides);
+                break;
+            case 'sphere':
+                toAdd = new Sphere(name, entities[e].radius);
+                break;
+            case 'cylinder':
+                toAdd = new Cylinder(name, entities[e].radius, entities[e].height);
+                break;
+            case 'capsule':
+                toAdd = new Capsule(name, entities[e].radius, entities[e].height);
+                break;
+            default:
+                toAdd = null;
+                console.error('Unknown Entity: ' + name + ' with type: ' + type);
+                break;
+        }
+
+        if (toAdd != null) {
+            toAdd.setPosition(entities[e].pos);
+            toAdd.setRotation(entities[e].rot);
+            this.addEntity(toAdd);
+        }
+
+    }
+
     return;
 }
 
