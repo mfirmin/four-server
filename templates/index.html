@@ -1,35 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
-<script type="text/javascript">
-
-    console.log('http://' + document.domain + ':' + location.port);
-
-    var socket = io.connect('http://' + document.domain + ':' + location.port);
-
-    socket.on('connect', function() {
-            socket.emit('event_connect', {data: 'I\'m connected'});
-    });
-
-    socket.on('frame', function(msg) {
-            jsonmsg = JSON.parse(msg);
-            $('#echoResult').text(jsonmsg.rHand.pos[1]);
-    });
-
-    socket.on('init', function(msg) {
-            jsonmsg = JSON.parse(msg);
-            $('#echoResult').text(jsonmsg.entities.rHand.pos[0]);
-    });
-
-    socket.emit('init', 'default');
-            
-/*
-    setInterval(function() {
-        socket.emit('requestframe', {'data': 'nothing'});
-    }, 1000./30.);
-    */
-    
-</script>
+<script src="static/bundle.js"></script>
 <h1>Four</h1>
 <p>
 <strong> <div id='echoResult'></div></strong>
