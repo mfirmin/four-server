@@ -17,9 +17,9 @@ socket.on('connect', function() {
 
 socket.on('frame', function(msg) {
     jsonmsg = JSON.parse(msg);
-    var world = worlds[jsonmsg.wname];
-    world.setFromJSON(jsonmsg.data);
-    world.renderer.render(this.scene, this.camera);
+    var world = worlds[jsonmsg.name];
+    world.setFromJSON(jsonmsg);
+    world.renderer.render(world.scene, world.camera);
     world.renderReady = true;
 });
 
@@ -30,6 +30,8 @@ socket.on('init', function(msg) {
     world.populateFromJSON(jsonmsg);
 
     worlds[world.name] = world;
+
+    world.renderReady = true;
 
     var renderLoop = function() {
         if (world.renderReady) {

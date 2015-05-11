@@ -85,6 +85,19 @@ World.prototype.addEntity = function(e) {
     this.scene.add(e.mesh);
 }
 
+World.prototype.setFromJSON = function(data) {
+    var entities = data.entities;
+    for (var e in entities) {
+        var ent = this.entities[e];
+        if (ent !== undefined) {
+            ent.setPosition(entities[e].pos);
+            ent.setRotation(entities[e].rot);
+        } else {
+            console.error('attempting to set unknown entity with name ' + e);
+        }
+    }
+}
+
 World.prototype.populateFromJSON = function(data) {
 
     var entities = data.entities;

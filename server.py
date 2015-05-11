@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-    jQuery Example
-    ~~~~~~~~~~~~~~
+    Four Server
+    Back end for _four_ project
 
-    A simple application that shows how Flask and jQuery get along.
-
-    :copyright: (c) 2015 by Armin Ronacher.
-    :license: BSD, see LICENSE for more details.
 """
 import socket, time, string, struct
 from flask import Flask, jsonify, render_template, request, json
@@ -32,7 +28,6 @@ def requestframe(message_in):
     client_cpp.send('init')
 
     msglen = struct.pack("!i", len(message_in))
-    print len(message_in) 
     bytesSent = client_cpp.send(msglen)
 
     client_cpp.send(message_in)
@@ -45,17 +40,27 @@ def requestframe(message_in):
 
     socketio.emit('init', msg)
 
-@socketio.on('requestframe')
+@socketio.on('requestFrame')
 def requestframe(message_in):
+
+    msglen = struct.pack("!i", 12)
+    bytesSent = client_cpp.send(msglen)
+
+    client_cpp.send('requestFrame')
+    
+# send world name
+    msglen = struct.pack("!i", len(message_in))
+    bytesSent = client_cpp.send(msglen)
+
+    client_cpp.send(message_in)
 
     msglenstr = client_cpp.recv(4)
 
     msglen = struct.unpack("@i", msglenstr)
 
-    msg = client_cpp.recv(msglen[0])
+    msg_out = client_cpp.recv(msglen[0])
 
-    socketio.emit('frame', msg)
-
+    socketio.emit('frame', msg_out)
 
 if __name__ == '__main__':
     socketio.run(app, '127.0.0.1', 4000)
