@@ -91,8 +91,11 @@ World.prototype.setFromJSON = function(data) {
     for (var e in entities) {
         var ent = this.entities[e];
         if (ent !== undefined) {
+            ent.setMfromQandP(entities[e].rot, entities[e].pos);
+            /*
             ent.setPosition(entities[e].pos);
             ent.setRotation(entities[e].rot);
+            */
         } else {
             console.error('attempting to set unknown entity with name ' + e);
         }
@@ -130,8 +133,11 @@ World.prototype.populateFromJSON = function(data) {
         }
 
         if (toAdd != null) {
+            toAdd.setMfromQandP(entities[e].rot, entities[e].pos);
+            /*
             toAdd.setPosition(entities[e].pos);
             toAdd.setRotation(entities[e].rot);
+            */
             this.addEntity(toAdd);
         }
 
