@@ -6,6 +6,7 @@ var Box      = require('../entity/box');
 var Cylinder = require('../entity/cylinder');
 var Sphere   = require('../entity/sphere');
 var Capsule  = require('../entity/capsule');
+var Plane    = require('../entity/plane');
 
 function World(name) {
 
@@ -118,6 +119,9 @@ World.prototype.populateFromJSON = function(data) {
                 break;
             case 'capsule':
                 toAdd = new Capsule(name, entities[e].radius, entities[e].height);
+                break;
+            case 'plane':
+                toAdd = new Plane(name, entities[e].A, entities[e].B);
                 break;
             default:
                 toAdd = null;
