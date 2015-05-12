@@ -26,14 +26,23 @@ Entity.prototype.setPosition = function(xyz) {
     this.mesh.position.x = xyz[0];
     this.mesh.position.y = xyz[1];
     this.mesh.position.z = xyz[2];
+
 }
 Entity.prototype.setRotation = function(q) {
-    /*
-    this.mesh.position.x = xyz[0];
-    this.mesh.position.y = xyz[0];
-    this.mesh.position.z = xyz[0];
-    this.mesh.position.q = xyz[0];
-    */
+
+    var quat = new THREE.Quaternion();
+    quat.x = q[1]//q[1];
+    quat.y =q[2] //q[0];
+    quat.z =q[3]// q[0];
+    quat.w = q[0];
+    quat.normalize();
+    this.mesh.quaternion = quat;
+    this.mesh.updateMatrix();
+
+    console.log(this.mesh.matrix);
+    
+//    this.mesh.rotation.x = Math.PI/4.;
+    
 }
 
 Entity.prototype.getPosition = function() {
