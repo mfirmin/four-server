@@ -112,19 +112,19 @@ World.prototype.populateFromJSON = function(data) {
         var toAdd;
         switch (type) {
             case 'box':
-                toAdd = new Box(name, entities[e].sides);
+                toAdd = new Box(name, entities[e].sides,{default_rotation: [.7071,.7071,0,0]});
                 break;
             case 'sphere':
-                toAdd = new Sphere(name, entities[e].radius);
+                toAdd = new Sphere(name, entities[e].radius,{default_rotation: [.7071,.7071,0,0]});
                 break;
             case 'cylinder':
-                toAdd = new Cylinder(name, entities[e].radius, entities[e].height);
+                toAdd = new Cylinder(name, entities[e].radius, entities[e].height,{default_rotation: [.7071,.7071,0,0]});
                 break;
             case 'capsule':
-                toAdd = new Capsule(name, entities[e].radius, entities[e].height);
+                toAdd = new Capsule(name, entities[e].radius, entities[e].height,{default_rotation: [.7071,.7071,0,0]});
                 break;
             case 'plane':
-                toAdd = new Plane(name, entities[e].A, entities[e].B);
+                toAdd = new Plane(name, entities[e].A, entities[e].B,{default_rotation: [.7071,.7071,0,0]});
                 break;
             default:
                 toAdd = null;

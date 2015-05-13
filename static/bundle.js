@@ -16,6 +16,8 @@ Box.prototype.constructor = Box;
 
 Box.prototype.initialize = function() {
 
+    Entity.prototype.initialize.call(this);
+
     var c = (this.opts.color === undefined) ? [130,130,130] : this.opts.color;
     var cstring = 'rgb(' + c[0] + ','+ c[1]  + ',' + c[2]  + ')';
     var color = new THREE.Color(cstring);
@@ -47,6 +49,8 @@ Capsule.prototype = Object.create(Entity.prototype);
 Capsule.prototype.constructor = Capsule;
 
 Capsule.prototype.initialize = function() {
+
+    Entity.prototype.initialize.call(this);
 
     var c = (this.opts.color === undefined) ? [130,130,130] : this.opts.color;
     var cstring = 'rgb(' + c[0] + ','+ c[1]  + ',' + c[2]  + ')';
@@ -93,6 +97,8 @@ Cylinder.prototype.constructor = Cylinder;
 
 Cylinder.prototype.initialize = function() {
 
+    Entity.prototype.initialize.call(this);
+
     var c = (this.opts.color === undefined) ? [130,130,130] : this.opts.color;
     var cstring = 'rgb(' + c[0] + ','+ c[1]  + ',' + c[2]  + ')';
     var color = new THREE.Color(cstring);
@@ -125,19 +131,36 @@ function Entity(name, opts) {
     this.initialize();
 
     this.mesh.matrixAutoUpdate = false;
-
 }
 
 
 Entity.prototype.constructor = Entity;
 
 Entity.prototype.initialize = function() {
+    var rot = (this.opts.default_rotation === undefined) ? [0,0,0,0] : this.opts.default_rotation;
+
+    this.default_rotation = new THREE.Quaternion();
+
+    this.default_rotation.w = rot[0];
+    this.default_rotation.x = rot[1];
+    this.default_rotation.y = rot[2];
+    this.default_rotation.z = rot[3];
+
+    console.log(this.default_rotation);
 
 }
 
 Entity.prototype.setMfromQandP = function(q_in,p) {
 
-    var q = {w: q_in[0], v: {x: q_in[1], y: q_in[2]+Math.PI/2., z: q_in[3]}};
+    var quat = new THREE.Quaternion();
+    quat.x = q_in[1]//q_in[1];
+    quat.y = q_in[2] //q_in[0];
+    quat.z = q_in[3]// q_in[0];
+    quat.w = q_in[0];
+
+    quat.multiply(this.default_rotation);
+
+    var q = {w: quat.w, v: {x: quat.x, y: quat.y, z: quat.z}};
     var pos = {x: p[0], y: p[1], z: p[2]};
 
     var R = new Float32Array(9);
@@ -151,7 +174,6 @@ Entity.prototype.setMfromQandP = function(q_in,p) {
     this.mesh.matrix.elements[2] = R[2]; this.mesh.matrix.elements[6] = R[5]; this.mesh.matrix.elements[10] = R[8];  this.mesh.matrix.elements[14] = pos.z;
     this.mesh.matrix.elements[3] = 0;    this.mesh.matrix.elements[7] = 0;    this.mesh.matrix.elements[11] = 0;     this.mesh.matrix.elements[15] = 1;
 
-//    console.log(this.mesh.matrix);
 
 }
 
@@ -209,6 +231,8 @@ Plane.prototype.constructor = Plane;
 
 Plane.prototype.initialize = function() {
 
+    Entity.prototype.initialize.call(this);
+
     var c = (this.opts.color === undefined) ? [130,130,130] : this.opts.color;
     var cstring = 'rgb(' + c[0] + ','+ c[1]  + ',' + c[2]  + ')';
     var color = new THREE.Color(cstring);
@@ -245,6 +269,8 @@ Sphere.prototype = Object.create(Entity.prototype);
 Sphere.prototype.constructor = Sphere;
 
 Sphere.prototype.initialize = function() {
+
+    Entity.prototype.initialize.call(this);
 
     var c = (this.opts.color === undefined) ? [130,130,130] : this.opts.color;
     var cstring = 'rgb(' + c[0] + ','+ c[1]  + ',' + c[2]  + ')';
@@ -1216,19 +1242,19 @@ World.prototype.populateFromJSON = function(data) {
         var toAdd;
         switch (type) {
             case 'box':
-                toAdd = new Box(name, entities[e].sides);
+                toAdd = new Box(name, entities[e].sides,{default_rotation: [.7071,.7071,0,0]});
                 break;
             case 'sphere':
-                toAdd = new Sphere(name, entities[e].radius);
+                toAdd = new Sphere(name, entities[e].radius,{default_rotation: [.7071,.7071,0,0]});
                 break;
             case 'cylinder':
-                toAdd = new Cylinder(name, entities[e].radius, entities[e].height);
+                toAdd = new Cylinder(name, entities[e].radius, entities[e].height,{default_rotation: [.7071,.7071,0,0]});
                 break;
             case 'capsule':
-                toAdd = new Capsule(name, entities[e].radius, entities[e].height);
+                toAdd = new Capsule(name, entities[e].radius, entities[e].height,{default_rotation: [.7071,.7071,0,0]});
                 break;
             case 'plane':
-                toAdd = new Plane(name, entities[e].A, entities[e].B);
+                toAdd = new Plane(name, entities[e].A, entities[e].B,{default_rotation: [.7071,.7071,0,0]});
                 break;
             default:
                 toAdd = null;

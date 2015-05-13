@@ -15,6 +15,8 @@ Sphere.prototype.constructor = Sphere;
 
 Sphere.prototype.initialize = function() {
 
+    Entity.prototype.initialize.call(this);
+
     var c = (this.opts.color === undefined) ? [130,130,130] : this.opts.color;
     var cstring = 'rgb(' + c[0] + ','+ c[1]  + ',' + c[2]  + ')';
     var color = new THREE.Color(cstring);
