@@ -29,8 +29,6 @@ Entity.prototype.initialize = function() {
     this.default_rotation.y = rot[2];
     this.default_rotation.z = rot[3];
 
-    console.log(this.default_rotation);
-
 }
 
 Entity.prototype.setMfromQandP = function(q_in,p) {

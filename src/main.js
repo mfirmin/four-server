@@ -1,5 +1,6 @@
 
 
+var $     = require('jquery');
 var io    = require('./lib/socketio');
 var World = require('./world/world');
 var Box   = require('./entity/box');
@@ -44,6 +45,14 @@ socket.on('init', function(msg) {
     renderLoop();
 
 //        world.go();
+});
+
+
+$(document).ready(function() {
+    $('button').click(function(){
+        console.log('reset default');
+        socket.emit('reset', 'default');
+    });
 });
 
 socket.emit('init', 'default');

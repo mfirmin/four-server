@@ -20,7 +20,7 @@ def index():
     return render_template('index.html')
 
 @socketio.on('init')
-def requestframe(message_in):
+def init(message_in):
 
     msglen = struct.pack("!i", 4)
     bytesSent = client_cpp.send(msglen)
@@ -39,6 +39,20 @@ def requestframe(message_in):
     msg = client_cpp.recv(msglen[0])
 
     socketio.emit('init', msg)
+
+@socketio.on('reset')
+def reset(message_in):
+
+    msglen = struct.pack("!i", 5)
+    bytesSent = client_cpp.send(msglen)
+
+    client_cpp.send('reset')
+    
+# send world name
+    msglen = struct.pack("!i", len(message_in))
+    bytesSent = client_cpp.send(msglen)
+
+    client_cpp.send(message_in)
 
 @socketio.on('requestFrame')
 def requestframe(message_in):
