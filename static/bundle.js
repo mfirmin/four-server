@@ -10522,7 +10522,6 @@ socket.on('connect', function() {
 socket.on('frame', function(msg) {
     jsonmsg = JSON.parse(msg);
     var world = worlds[jsonmsg.name];
-    console.log(jsonmsg);
     world.setFromJSON(jsonmsg);
     world.renderer.render(world.scene, world.camera);
     world.renderReady = true;
