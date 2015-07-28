@@ -8,10 +8,13 @@
  *
 */
 
+var primitives = require('./primitives/primitives')
+
 function Controller() {
 
     this.entities = {};
     this.joints = {};
+
 }
 
 
@@ -19,10 +22,14 @@ Controller.prototype.constructor = Controller;
 
 Controller.prototype.initialize = function() {
 
-}
+    this.rShoulder_pdc = new primitives.PDController(0);
 
-Controller.prototype.setFromJSON = function(data) {
+};
 
-}
+Controller.prototype.step = function(state) {
+
+    return {'rShoulder': this.rShoulder_pdc(state.joints.rShoulder.rot[0], state.joints.rShoulder.omega[0]) };
+
+};
 
 module.exports = Controller;

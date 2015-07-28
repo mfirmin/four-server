@@ -40,6 +40,12 @@ def init(message_in):
 
     socketio.emit('init', msg)
 
+@socketio.on('torques')
+def sendTorques(message_in):
+    # TODO: Working here! 
+# 1. stringify message
+# 2. send to cpp
+
 @socketio.on('reset')
 def reset(message_in):
 

@@ -4,13 +4,16 @@ var $     = require('jquery');
 var io    = require('./lib/socketio');
 var World = require('./world/world');
 var Box   = require('./entity/box');
+var Controller = require('./controller/controller');
 
 console.log('http://' + document.domain + ':' + location.port);
 
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-
 var worlds = {};
+
+var controller = new Controller();
+controller.initialize();
 
 socket.on('connect', function() {
         socket.emit('event_connect', {data: 'I\'m connected'});
@@ -21,6 +24,11 @@ socket.on('frame', function(msg) {
     var world = worlds[jsonmsg.name];
     world.setFromJSON(jsonmsg);
     world.renderer.render(world.scene, world.camera);
+
+    var torques = controller.step(jsonmsg);
+
+    socket.emit('torques', torques);
+
     world.renderReady = true;
 });
 
@@ -43,8 +51,6 @@ socket.on('init', function(msg) {
     }.bind(this)
 
     renderLoop();
-
-//        world.go();
 });
 
 
