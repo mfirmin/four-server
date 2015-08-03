@@ -22,13 +22,13 @@ Controller.prototype.constructor = Controller;
 
 Controller.prototype.initialize = function() {
 
-    this.rShoulder_pdc = new primitives.PDController(0);
+    this.rShoulder_pdc = new primitives.PDController(-.3);
 
 };
 
 Controller.prototype.step = function(state) {
 
-    return {'rShoulder': this.rShoulder_pdc(state.joints.rShoulder.rot[0], state.joints.rShoulder.omega[0]) };
+    return {'rShoulder': -this.rShoulder_pdc(state.joints.rShoulder.rot[2], state.joints.rShoulder.omega[2]) };
 
 };
 

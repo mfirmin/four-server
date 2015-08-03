@@ -42,9 +42,20 @@ def init(message_in):
 
 @socketio.on('torques')
 def sendTorques(message_in):
-    # TODO: Working here! 
-# 1. stringify message
-# 2. send to cpp
+    msg_str = json.dumps(message_in)
+
+    msglen = struct.pack("!i", 7)
+    bytesSent = client_cpp.send(msglen)
+
+    # send torques
+    client_cpp.send('torques')
+
+    # send lengths of torques str
+    msglen = struct.pack("!i", len(msg_str))
+    bytesSent = client_cpp.send(msglen)
+
+    # send torques json str
+    client_cpp.send(msg_str)
 
 @socketio.on('reset')
 def reset(message_in):

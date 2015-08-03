@@ -23,13 +23,13 @@ Controller.prototype.constructor = Controller;
 
 Controller.prototype.initialize = function() {
 
-    this.rShoulder_pdc = new primitives.PDController(0);
+    this.rShoulder_pdc = new primitives.PDController(-.3);
 
 };
 
 Controller.prototype.step = function(state) {
 
-    return {'rShoulder': this.rShoulder_pdc(state.joints.rShoulder.rot[0], state.joints.rShoulder.omega[0]) };
+    return {'rShoulder': -this.rShoulder_pdc(state.joints.rShoulder.rot[2], state.joints.rShoulder.omega[2]) };
 
 };
 
@@ -58,12 +58,14 @@ function PDController(goal, kp, kd) {
     goal = (goal === undefined) ? 0 : goal;
 
     var c = function(angle, ang_vel) {
+
         this.kp = kp;
         this.kd = kd;
         this.goal = goal;
 
         angle = (angle === undefined) ? 0 : angle;
         ang_vel = (ang_vel === undefined) ? 0 : ang_vel;
+
 
         return kp*(angle - goal) - kd*ang_vel;
     }
@@ -10605,7 +10607,7 @@ socket.on('frame', function(msg) {
 
     var torques = controller.step(jsonmsg);
 
-    console.log(torques);
+    socket.emit('torques', {"wname": jsonmsg.name, "data": torques});
 
     world.renderReady = true;
 });

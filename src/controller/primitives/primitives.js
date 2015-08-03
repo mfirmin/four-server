@@ -20,12 +20,14 @@ function PDController(goal, kp, kd) {
     goal = (goal === undefined) ? 0 : goal;
 
     var c = function(angle, ang_vel) {
+
         this.kp = kp;
         this.kd = kd;
         this.goal = goal;
 
         angle = (angle === undefined) ? 0 : angle;
         ang_vel = (ang_vel === undefined) ? 0 : ang_vel;
+
 
         return kp*(angle - goal) - kd*ang_vel;
     }

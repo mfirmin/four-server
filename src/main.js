@@ -27,7 +27,7 @@ socket.on('frame', function(msg) {
 
     var torques = controller.step(jsonmsg);
 
-    socket.emit('torques', torques);
+    socket.emit('torques', {"wname": jsonmsg.name, "data": torques});
 
     world.renderReady = true;
 });
